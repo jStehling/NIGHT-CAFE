@@ -1,0 +1,142 @@
+[gd_scene load_steps=7 format=3 uid="uid://bfcb0vacxsaut"]
+
+[ext_resource type="Script" uid="uid://dspn7l0l3pim8" path="res://patron/patron.gd" id="1_44a8u"]
+[ext_resource type="Texture2D" uid="uid://b0ad1v042y7du" path="res://icon.svg" id="1_uqk5b"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pulac"]
+size = Vector2(128, 128)
+
+[sub_resource type="Animation" id="Animation_pulac"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:scale:x")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:scale:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="Animation" id="Animation_44a8u"]
+resource_name = "move to bar"
+length = 4.0
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0, 0, 0, 2, 2, 2, 2, 2),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, -45.45, -0.17, 8.500851, 0.49666667, -24.835817, -95.677, -0.16166668, 8.3855095, 0.335, -17.376158, -148.105, -0.16666667, 8.651991, 0.16833334, -8.73851, -156.966, -0.08252871, 1.7137914, 0.33413798, -6.93871, -163.661, -0.0847007, 1.8189614, 0.24943726, -5.3567057, -169.976, -0.083655044, 2.0323179, 0.16578221, -4.0275173, -178.887, -0.08260934, 2.4951568, 0.08317288, -2.512178, -200.02, -0.6666667, 33.33667, 0, 0),
+"times": PackedFloat32Array(0, 0.53333336, 1, 1.5, 1.9951723, 2.5033765, 3.0053067, 3.5009627, 4)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 0, 0, 0, 2, 2, 2, 2, 2),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, -67.66, -0.17, 0, 0.49666667, 0, 40, -0.16166668, -3.6705933, 0.335, 7.6060743, -40, -0.16666667, 3.3167496, 0.16833334, -3.3499172, 40, -0.08252871, -1.3204594, 0.33413798, 5.3462076, -40, -0.0847007, 1.6899348, 0.24943726, -4.9767323, 40, -0.083655044, -2.235834, 0.16578221, 4.430833, -40, -0.08260934, 3.3220026, 0.08317288, -3.3446643, 0, -0.6666667, 0, 0, 0),
+"times": PackedFloat32Array(0, 0.53333336, 1, 1.5, 1.9951723, 2.5033765, 3.0053067, 3.5009627, 4)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".:scale:x")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0, 2),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 3, -0.6666667, -0.33333334, 0, 0),
+"times": PackedFloat32Array(0, 4)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath(".:scale:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0, 2),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 3, -0.6666667, -0.33333334, 0, 0),
+"times": PackedFloat32Array(0, 4)
+}
+tracks/4/type = "method"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath(".")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"patronIsReady"
+}]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_q3y7j"]
+_data = {
+&"RESET": SubResource("Animation_pulac"),
+&"move to bar": SubResource("Animation_44a8u")
+}
+
+[node name="patron" type="Node2D"]
+script = ExtResource("1_44a8u")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_uqk5b")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_pulac")
+
+[node name="Timer" type="Timer" parent="."]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_q3y7j")
+}
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

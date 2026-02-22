@@ -1,0 +1,44 @@
+[gd_scene load_steps=6 format=3 uid="uid://cloltvafnye5m"]
+
+[ext_resource type="Script" uid="uid://qp0jeevdci7u" path="res://cup(dont use this, afraid to delete))/cupmachine.gd" id="2_0urt5"]
+[ext_resource type="Texture2D" uid="uid://yeada4cgqr8g" path="res://cup2/cup.png" id="2_26sa4"]
+[ext_resource type="Script" uid="uid://c3t611by3xcjl" path="res://cup(dont use this, afraid to delete))/deployed.gd" id="3_k0kjc"]
+[ext_resource type="Script" uid="uid://coi6pw2qfi31f" path="res://cup(dont use this, afraid to delete))/deploying.gd" id="4_f22ys"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q1s7v"]
+size = Vector2(65, 76)
+
+[node name="cup" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(33.5, 44.5)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("2_26sa4")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(31, 42)
+rect = Rect2(-30, -41, 65, 77)
+
+[node name="statemachine" type="Node" parent="." node_paths=PackedStringArray("initialState")]
+script = ExtResource("2_0urt5")
+initialState = NodePath("deployed")
+
+[node name="deployed" type="Node" parent="statemachine"]
+script = ExtResource("3_k0kjc")
+
+[node name="deploying" type="Node" parent="statemachine"]
+script = ExtResource("4_f22ys")
+
+[node name="Area2D" type="Area2D" parent="."]
+position = Vector2(33.5, 44.5)
+priority = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2(-0.5, -4)
+shape = SubResource("RectangleShape2D_q1s7v")
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
+[connection signal="body_entered" from="Area2D" to="statemachine/deploying" method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="statemachine/deploying" method="_on_area_2d_body_exited"]
+[connection signal="mouse_entered" from="Area2D" to="statemachine/deployed" method="_on_area_2d_mouse_entered"]
+[connection signal="mouse_exited" from="Area2D" to="statemachine/deployed" method="_on_area_2d_mouse_exited"]

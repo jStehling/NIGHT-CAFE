@@ -1,0 +1,148 @@
+[gd_scene load_steps=11 format=3 uid="uid://dv0lmd27egqip"]
+
+[ext_resource type="PackedScene" uid="uid://b0qdwc2lqmoa1" path="res://machines/test_target.tscn" id="1_6uqi0"]
+[ext_resource type="Script" uid="uid://cfex6l0bsh7sf" path="res://world.gd" id="1_ykrsh"]
+[ext_resource type="PackedScene" uid="uid://3s5b05brp5ft" path="res://screens/eo_dscreen.tscn" id="2_00tp4"]
+[ext_resource type="Script" uid="uid://7t20ayslfbdi" path="res://patron/patron_manager.gd" id="2_xersf"]
+[ext_resource type="Texture2D" uid="uid://n18lixdipfm1" path="res://swoosh.png" id="3_6uqi0"]
+[ext_resource type="PackedScene" uid="uid://diqv17tk0bjk8" path="res://screens/pause_screen.tscn" id="4_00tp4"]
+[ext_resource type="Script" uid="uid://dyno7k12lcqm5" path="res://camera_2d.gd" id="4_ppyta"]
+[ext_resource type="Script" uid="uid://dgt8w1xg8vo2t" path="res://buttons/discard_cup.gd" id="5_vbegm"]
+[ext_resource type="PackedScene" uid="uid://dyggkk0pqewey" path="res://machines/finisharea.tscn" id="5_ykrsh"]
+[ext_resource type="Script" uid="uid://dvpd3haiuqspv" path="res://buttons/new_cup.gd" id="6_ehkex"]
+
+[node name="Node" type="Node2D" groups=["rooot"]]
+script = ExtResource("1_ykrsh")
+
+[node name="Camera2D" type="Camera2D" parent="." groups=["camera"]]
+position = Vector2(3207, 328)
+script = ExtResource("4_ppyta")
+
+[node name="orderTicket" type="RichTextLabel" parent="Camera2D"]
+offset_left = -559.0
+offset_top = 121.0
+offset_right = -358.0
+offset_bottom = 241.0
+
+[node name="warning Label" type="RichTextLabel" parent="Camera2D"]
+offset_left = -209.0
+offset_top = -69.0
+offset_right = 210.0
+offset_bottom = 81.0
+
+[node name="Timer" type="Timer" parent="Camera2D"]
+wait_time = 0.2
+
+[node name="EODscreen" parent="Camera2D" instance=ExtResource("2_00tp4")]
+position = Vector2(-576, -971)
+
+[node name="pause screen" parent="Camera2D" instance=ExtResource("4_00tp4")]
+process_mode = 2
+visible = false
+position = Vector2(-576, -324)
+
+[node name="patronManager" type="Node2D" parent="." groups=["patronManager"]]
+script = ExtResource("2_xersf")
+
+[node name="patron spawn" type="Node2D" parent="patronManager"]
+position = Vector2(3433, 239)
+
+[node name="initial wait" type="Timer" parent="patronManager"]
+wait_time = 3.5
+one_shot = true
+autostart = true
+
+[node name="second wait" type="Timer" parent="patronManager"]
+
+[node name="patronActTimer" type="Timer" parent="patronManager"]
+
+[node name="animation wait" type="Timer" parent="patronManager"]
+wait_time = 3.5
+
+[node name="cup spawn" type="Node2D" parent="." groups=["cupSpawn"]]
+position = Vector2(581, 477)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(2041, 337.99994)
+scale = Vector2(0.13389438, 0.13389438)
+texture = ExtResource("3_6uqi0")
+
+[node name="discard cup" type="Button" parent="."]
+offset_left = 930.0
+offset_top = 560.0
+offset_right = 1114.0
+offset_bottom = 609.0
+disabled = true
+text = "discard current cup"
+script = ExtResource("5_vbegm")
+
+[node name="new cup" type="Button" parent="."]
+offset_left = 929.0
+offset_top = 497.0
+offset_right = 1115.0
+offset_bottom = 544.0
+disabled = true
+text = "grab new cup "
+script = ExtResource("6_ehkex")
+
+[node name="machine manager" type="Node" parent="."]
+
+[node name="milk" parent="machine manager" instance=ExtResource("1_6uqi0")]
+position = Vector2(949, 99)
+label = "Milk"
+flavor = "Milk"
+
+[node name="coffee" parent="machine manager" instance=ExtResource("1_6uqi0")]
+position = Vector2(760, 102)
+label = "Coffee"
+flavor = "Coffee"
+
+[node name="tea" parent="machine manager" instance=ExtResource("1_6uqi0")]
+position = Vector2(575, 103)
+label = "Tea"
+flavor = "Tea"
+
+[node name="lavender" parent="machine manager" instance=ExtResource("1_6uqi0")]
+position = Vector2(204, 99)
+type = 1
+label = "lavender"
+flavor = "floral"
+
+[node name="chili" parent="machine manager" instance=ExtResource("1_6uqi0")]
+position = Vector2(388, 100)
+type = 1
+label = "Chili"
+flavor = "spicy"
+
+[node name="mint" parent="machine manager" instance=ExtResource("1_6uqi0")]
+position = Vector2(21, 96)
+type = 1
+label = "mint"
+flavor = "mint"
+
+[node name="citrus" parent="machine manager" instance=ExtResource("1_6uqi0")]
+position = Vector2(26, 335)
+type = 1
+label = "Citrus"
+flavor = "orange"
+
+[node name="vanilla" parent="machine manager" instance=ExtResource("1_6uqi0")]
+position = Vector2(948, 333)
+type = 1
+label = "vanilla"
+flavor = "vanilla"
+
+[node name="finish area" parent="." instance=ExtResource("5_ykrsh")]
+position = Vector2(3067, 354)
+
+[connection signal="timeout" from="Camera2D/Timer" to="Camera2D" method="_on_timer_timeout"]
+[connection signal="timeout" from="patronManager/initial wait" to="patronManager" method="_on_initial_wait_timeout"]
+[connection signal="timeout" from="patronManager/second wait" to="patronManager" method="_on_second_wait_timeout"]
+[connection signal="timeout" from="patronManager/patronActTimer" to="patronManager" method="_on_patron_act_timer_timeout"]
+[connection signal="timeout" from="patronManager/animation wait" to="patronManager" method="_on_animation_wait_timeout"]
+[connection signal="mouse_entered" from="discard cup" to="discard cup" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="discard cup" to="discard cup" method="_on_mouse_exited" flags=18]
+[connection signal="pressed" from="discard cup" to="." method="_on_discard_cup_pressed"]
+[connection signal="mouse_entered" from="new cup" to="new cup" method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="new cup" to="new cup" method="_on_mouse_exited"]
+[connection signal="pressed" from="new cup" to="." method="_on_new_cup_pressed"]

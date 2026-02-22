@@ -1,0 +1,38 @@
+[gd_scene load_steps=2 format=3 uid="uid://diqv17tk0bjk8"]
+
+[ext_resource type="Script" uid="uid://bnvbo0hodqn1i" path="res://screens/pause_screen.gd" id="1_gkx8r"]
+
+[node name="pause screen" type="Node2D" groups=["pauseScreen"]]
+process_mode = 3
+process_priority = 3
+script = ExtResource("1_gkx8r")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+self_modulate = Color(0, 0, 0, 0.3882353)
+offset_right = 1152.0
+offset_bottom = 648.0
+
+[node name="resume" type="Button" parent="."]
+offset_left = 494.0
+offset_top = 314.0
+offset_right = 630.0
+offset_bottom = 394.0
+text = "RESUME"
+
+[node name="save" type="Button" parent="."]
+offset_left = 196.0
+offset_top = 316.0
+offset_right = 333.0
+offset_bottom = 395.0
+text = "SAVE"
+
+[node name="settings" type="Button" parent="."]
+offset_left = 802.0
+offset_top = 315.0
+offset_right = 939.0
+offset_bottom = 392.0
+text = "SETTINGS"
+
+[connection signal="pressed" from="resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="save" to="." method="_on_save_pressed"]
+[connection signal="pressed" from="settings" to="." method="_on_settings_pressed"]

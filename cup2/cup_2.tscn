@@ -1,0 +1,55 @@
+[gd_scene load_steps=8 format=3 uid="uid://cb4ifvv1uv38p"]
+
+[ext_resource type="Script" uid="uid://dfe6nn13ddkq7" path="res://cup2/cup_2.gd" id="1_2p8vc"]
+[ext_resource type="Texture2D" uid="uid://yeada4cgqr8g" path="res://cup2/cup.png" id="1_eb1hx"]
+[ext_resource type="Script" uid="uid://kws5h3otqvt0" path="res://cup2/state_machine.gd" id="2_kni7t"]
+[ext_resource type="Script" uid="uid://x361rlvakmek" path="res://cup2/dropped.gd" id="3_2p8vc"]
+[ext_resource type="Script" uid="uid://b6yi1bpuo4i8x" path="res://cup2/dragging.gd" id="4_kni7t"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3u2p0"]
+size = Vector2(63, 79)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sec7g"]
+size = Vector2(65, 78)
+
+[node name="cup2" type="StaticBody2D" groups=["drink"]]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_2p8vc")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+offset_left = 43.0
+offset_top = -44.0
+offset_right = 194.0
+offset_bottom = 131.0
+
+[node name="area" type="Area2D" parent="." groups=["drink"]]
+priority = 6
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="area"]
+position = Vector2(-1.5, -5.5)
+shape = SubResource("RectangleShape2D_3u2p0")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_eb1hx")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
+shape = SubResource("RectangleShape2D_sec7g")
+disabled = true
+
+[node name="Statemachine" type="Node2D" parent="." node_paths=PackedStringArray("initialState")]
+script = ExtResource("2_kni7t")
+initialState = NodePath("dropped")
+
+[node name="dropped" type="Node" parent="Statemachine"]
+script = ExtResource("3_2p8vc")
+
+[node name="dragging" type="Node" parent="Statemachine"]
+script = ExtResource("4_kni7t")
+
+[connection signal="area_entered" from="area" to="Statemachine/dragging" method="_on_area_area_entered"]
+[connection signal="area_exited" from="area" to="Statemachine/dragging" method="_on_area_area_exited"]
+[connection signal="mouse_entered" from="area" to="Statemachine/dropped" method="_on_area_mouse_entered"]
+[connection signal="mouse_exited" from="area" to="Statemachine/dropped" method="_on_area_mouse_exited"]
