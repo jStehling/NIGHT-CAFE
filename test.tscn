@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dv0lmd27egqip"]
+[gd_scene load_steps=21 format=3 uid="uid://dv0lmd27egqip"]
 
 [ext_resource type="PackedScene" uid="uid://b0qdwc2lqmoa1" path="res://machines/test_target.tscn" id="1_6uqi0"]
 [ext_resource type="Script" uid="uid://cfex6l0bsh7sf" path="res://world.gd" id="1_ykrsh"]
@@ -10,6 +10,33 @@
 [ext_resource type="Script" uid="uid://dgt8w1xg8vo2t" path="res://buttons/discard_cup.gd" id="5_vbegm"]
 [ext_resource type="PackedScene" uid="uid://dyggkk0pqewey" path="res://machines/finisharea.tscn" id="5_ykrsh"]
 [ext_resource type="Script" uid="uid://dvpd3haiuqspv" path="res://buttons/new_cup.gd" id="6_ehkex"]
+[ext_resource type="Texture2D" uid="uid://b0j8cf0ex2wvu" path="res://shotgunMinigame/SwitchOn.png" id="11_a3se8"]
+[ext_resource type="Texture2D" uid="uid://s4us3iekn26v" path="res://shotgunMinigame/SwitchOff.png" id="12_uty7l"]
+[ext_resource type="Script" uid="uid://b6adfc15yfsmy" path="res://shotgunMinigame/light_switch.gd" id="13_45l4g"]
+[ext_resource type="Texture2D" uid="uid://bwbugrqh5adv3" path="res://shotgunMinigame/Hand.png" id="14_4uo0j"]
+[ext_resource type="Script" uid="uid://6opy3j3ys6wh" path="res://shotgunMinigame/hand.gd" id="15_vxl6d"]
+[ext_resource type="Script" uid="uid://bl08ogfo6ll24" path="res://shotgunMinigame/shotgun.gd" id="16_eski5"]
+[ext_resource type="Texture2D" uid="uid://dunyjvvhwb34a" path="res://shotgunMinigame/shotgun.png" id="16_uty7l"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_pdf00"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("11_a3se8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_uty7l")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_a6gra"]
+size = Vector2(35, 46)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dwqlq"]
+size = Vector2(50, 29)
 
 [node name="Node" type="Node2D" groups=["rooot"]]
 script = ExtResource("1_ykrsh")
@@ -135,6 +162,47 @@ flavor = "vanilla"
 [node name="finish area" parent="." instance=ExtResource("5_ykrsh")]
 position = Vector2(3067, 354)
 
+[node name="ShotgunMinigame" type="Node2D" parent="." groups=["ShotgunMiniGame"]]
+visible = false
+position = Vector2(3155, 603)
+
+[node name="lightSwitch" type="AnimatedSprite2D" parent="ShotgunMinigame" groups=["ShotgunMiniGame"]]
+position = Vector2(-451, -416)
+sprite_frames = SubResource("SpriteFrames_pdf00")
+script = ExtResource("13_45l4g")
+
+[node name="switchArea" type="Area2D" parent="ShotgunMinigame/lightSwitch" groups=["ShotgunMiniGame"]]
+
+[node name="switchColl" type="CollisionShape2D" parent="ShotgunMinigame/lightSwitch/switchArea" groups=["ShotgunMiniGame"]]
+position = Vector2(-2, 6)
+shape = SubResource("RectangleShape2D_a6gra")
+
+[node name="hand" type="Sprite2D" parent="ShotgunMinigame" groups=["ShotgunMiniGame"]]
+position = Vector2(514, -262)
+texture = ExtResource("14_4uo0j")
+script = ExtResource("15_vxl6d")
+
+[node name="handArea" type="Area2D" parent="ShotgunMinigame/hand" groups=["ShotgunMiniGame"]]
+position = Vector2(-2, -7)
+
+[node name="handColl" type="CollisionShape2D" parent="ShotgunMinigame/hand/handArea" groups=["ShotgunMiniGame"]]
+position = Vector2(-7, -2)
+shape = SubResource("RectangleShape2D_dwqlq")
+
+[node name="handTimer" type="Timer" parent="ShotgunMinigame/hand" groups=["ShotgunMiniGame"]]
+one_shot = true
+
+[node name="shotgun" type="Sprite2D" parent="ShotgunMinigame" groups=["ShotgunMiniGame"]]
+position = Vector2(-118, 22)
+texture = ExtResource("16_uty7l")
+script = ExtResource("16_eski5")
+
+[node name="grabGun" type="Button" parent="ShotgunMinigame" groups=["ShotgunMiniGame"]]
+offset_left = -148.0
+offset_top = -2.0
+offset_right = -72.0
+offset_bottom = 35.0
+
 [connection signal="timeout" from="Camera2D/Timer" to="Camera2D" method="_on_timer_timeout"]
 [connection signal="timeout" from="patronManager/initial wait" to="patronManager" method="_on_initial_wait_timeout"]
 [connection signal="timeout" from="patronManager/second wait" to="patronManager" method="_on_second_wait_timeout"]
@@ -146,3 +214,9 @@ position = Vector2(3067, 354)
 [connection signal="mouse_entered" from="new cup" to="new cup" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="new cup" to="new cup" method="_on_mouse_exited"]
 [connection signal="pressed" from="new cup" to="." method="_on_new_cup_pressed"]
+[connection signal="area_entered" from="ShotgunMinigame/hand/handArea" to="ShotgunMinigame/lightSwitch" method="_on_hand_area_area_entered"]
+[connection signal="mouse_entered" from="ShotgunMinigame/hand/handArea" to="ShotgunMinigame/hand" method="_on_hand_area_mouse_entered"]
+[connection signal="mouse_exited" from="ShotgunMinigame/hand/handArea" to="ShotgunMinigame/hand" method="_on_hand_area_mouse_exited"]
+[connection signal="timeout" from="ShotgunMinigame/hand/handTimer" to="ShotgunMinigame/hand" method="_on_hand_timer_timeout"]
+[connection signal="gunFired" from="ShotgunMinigame/shotgun" to="ShotgunMinigame/hand" method="_on_shotgun_gun_fired"]
+[connection signal="pressed" from="ShotgunMinigame/grabGun" to="ShotgunMinigame/shotgun" method="_on_grab_gun_pressed"]
