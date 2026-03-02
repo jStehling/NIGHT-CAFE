@@ -8,22 +8,36 @@ signal cameraSwapPosition
 
 var patronManager
 var pauseScreen
+var watchingForInput	:= false
 signal pausescreen
-@onready var warning_label: RichTextLabel = $"warning Label"
+@onready var warning_label: Label = $"warning Label"
 @onready var timer: Timer = $Timer
-
+var count = 0
 func _ready() -> void:
 	patronManager = get_tree().get_first_node_in_group("patronManager")
 	patronManager.warning.connect(warningLabel)
-	
+	SignalBus.flashTextOnScreen.connect(hints)
 	pauseScreen = get_tree().get_first_node_in_group("pauseScreen")
+	
+func hints(text : String) -> void:
+	watchingForInput = true
+	warning_label.text = text
+	#var tween = get_tree().create_tween()
+	#tween.tween_property(warning_label, "modulate", 1), 1)
 
 func _process(_delta : float) -> void:
 	if Input.is_action_just_pressed("Swap Screen"):
 		move_screen()
+		
 	if Input.is_action_just_pressed("pause"):
 		pausescreen.emit()
 		
+	if watchingForInput:
+		if Input.is_action_just_pressed("Swap Screen"):
+			watchingForInput = false
+			SignalBus.swappedScreensTutorial.emit()
+			warning_label.text = ""
+			
 func move_screen():
 	
 	if on_drinks: 
@@ -40,6 +54,7 @@ func move_screen():
 		cameraSwapPosition.emit(on_drinks)
 
 func warningLabel():
+	warning_label.label_settings.font_color = Color(Color.WHITE, 1)
 	warning_label.text = '"scary noise"'
 	timer.start()
 

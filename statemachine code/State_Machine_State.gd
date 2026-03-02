@@ -1,45 +1,28 @@
 extends Node2D
+class_name state_machine_state
 
-var can_fill 					:= false
-
-var mainFlavor 					: String
-var subFlavor					: String
-
-var origin 						: Vector2
 var states 						: Dictionary
 @export var initialState 		: State
 @export var currentState 		: State
 
-@onready var dragging	: Node = $dragging
-@onready var label: RichTextLabel = $"../RichTextLabel"
-
-signal drinkFilled
-
 func _ready() -> void:
-	mainFlavor 	= ""
-	subFlavor	= ""
-	
-	for node in get_tree().get_nodes_in_group("machines"):
-		if node.has_signal("fill"):
-			node.fill.connect(fill)
-	
-	origin = global_position
-	
-	
-	dragging.valid_area.connect(valid_area)
-	
 	for child in get_children():
 		if child is State:
 			states[child.name.to_lower()] = child
 			child.Transition.connect(Transition)
 			
+func Enter():
 	if initialState:
 		initialState.Enter()
 		currentState = initialState
 		
+func Exit():
+	currentState = null
+		
 func _process(delta: float) -> void:
 	if currentState:
 		currentState.Update(delta)
+		
 func _physics_process(delta: float) -> void:
 	if currentState:
 		currentState.Physics_Update(delta)
@@ -58,20 +41,3 @@ func Transition(newState : String) -> void:
 	currentState = nextState
 	currentState.Enter()
 	
-func valid_area(valid : bool) -> void:
-	can_fill = valid
-	
-func fill(type : int, flavor : String):
-	if can_fill:
-		if type == 0:
-			mainFlavor += flavor + "\n"
-		else:
-			subFlavor += flavor + "\n"
-			
-		updateLabel()
-	else:
-		print("cannot fill")
-		
-		
-func updateLabel():
-	label.text = mainFlavor + subFlavor

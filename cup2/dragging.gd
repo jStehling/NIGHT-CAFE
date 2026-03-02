@@ -1,16 +1,20 @@
 extends State
 
-var active 		: bool
-var droppable 	: bool
-var finished	: bool
+var active 			: bool
+var droppable 		: bool
+var finished		: bool
+var initialTutorial : bool = true
 @onready var cup: StaticBody2D = $"../.."
 @onready var statemachine: Node2D = $".."
 
 signal valid_area
 signal drinkSubmitted
 
+#only emitted on day1 during tutorial
+
 func Enter():
 	#print("entering dragging")
+		
 	active 		= true
 	droppable 	= false
 	

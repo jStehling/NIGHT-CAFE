@@ -30,10 +30,10 @@ func _ready() -> void:
 	node.killPatron.connect(killPatron)
 	camera.cameraSwapPosition.connect(cameraPosUpdate)
 	DaySystem.startNewDay.connect(newPatronEnters)
-	 
-func signalTester():
-	print("signal called")
-	
+	SignalBus.tutorialOver.connect(startgame)
+
+func startgame()-> void:
+	initial_wait.start()
 func newPatronEnters(_unused):	
 	#print("new patron")
 	if patron:
@@ -50,6 +50,7 @@ func newPatronEnters(_unused):
 	phase = 2
 	if not gamestart:
 		initial_wait.start()
+		
 func cameraPosUpdate(isOnPatron : bool):
 	#true when camea is on drinks, false when on patron
 	cameraOnDrinks = isOnPatron
@@ -81,6 +82,7 @@ func _on_second_wait_timeout() -> void:
 func _on_animation_wait_timeout() -> void:
 	second_wait.start(8)
 	node.createOrder()
+	print("not here")
 	#print("order created")
 	animation_wait.stop()
 	second_wait.start(10)

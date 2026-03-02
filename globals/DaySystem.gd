@@ -4,28 +4,36 @@ const days = [1,2,3,4,5]
 
 var currentDay
 var numberOfPatrons
-
-var mistakes = 0
+var tutorial	: bool 	= true
+var mistakes 			= 0
 
 var root
 var EODscreen
 
 signal startNewDay
 signal callEODScreen
+
 func _ready() -> void:
-	print("daysystem")
-	
+	#print("daysystem")
+	SignalBus.tutorialOver.connect(tutorialOver)
 	EODscreen = get_tree().get_first_node_in_group("EODscreen")
 	EODscreen.transitionNextDay.connect(nextDay)
 	
 	currentDay = days[0]
+	print("current day: ", currentDay)
 	numberOfPatrons = 1
-	print("DAY 1")
-
+	#print("DAY 1")
+func tutorialOver():
+	tutorial = false
 func patronServed() -> void:
-	numberOfPatrons -= 1
-	print("patron served")
-	print("number of patrons left: ", numberOfPatrons)
+	if tutorial:
+		pass
+	else:
+		numberOfPatrons -= 1
+		print("patron served")
+		print("number of patrons left: ", numberOfPatrons)
+	
+	
 	if numberOfPatrons == 0:
 		callEODScreen.emit()
 
@@ -48,5 +56,6 @@ func nextDay() -> void:
 			print("day 5")
 			finalDay()
 	startNewDay.emit(false)
+	
 func finalDay():
 	numberOfPatrons = 2

@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://dv0lmd27egqip"]
+[gd_scene load_steps=24 format=3 uid="uid://dv0lmd27egqip"]
 
 [ext_resource type="PackedScene" uid="uid://b0qdwc2lqmoa1" path="res://machines/test_target.tscn" id="1_6uqi0"]
 [ext_resource type="Script" uid="uid://cfex6l0bsh7sf" path="res://world.gd" id="1_ykrsh"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://n18lixdipfm1" path="res://swoosh.png" id="3_6uqi0"]
 [ext_resource type="PackedScene" uid="uid://diqv17tk0bjk8" path="res://screens/pause_screen.tscn" id="4_00tp4"]
 [ext_resource type="Script" uid="uid://dyno7k12lcqm5" path="res://camera_2d.gd" id="4_ppyta"]
+[ext_resource type="PackedScene" uid="uid://ris5qbdr05n3" path="res://managers/tutorial_manager.tscn" id="5_45l4g"]
 [ext_resource type="Script" uid="uid://dgt8w1xg8vo2t" path="res://buttons/discard_cup.gd" id="5_vbegm"]
 [ext_resource type="PackedScene" uid="uid://dyggkk0pqewey" path="res://machines/finisharea.tscn" id="5_ykrsh"]
 [ext_resource type="Script" uid="uid://dvpd3haiuqspv" path="res://buttons/new_cup.gd" id="6_ehkex"]
@@ -17,6 +18,12 @@
 [ext_resource type="Script" uid="uid://6opy3j3ys6wh" path="res://shotgunMinigame/hand.gd" id="15_vxl6d"]
 [ext_resource type="Script" uid="uid://bl08ogfo6ll24" path="res://shotgunMinigame/shotgun.gd" id="16_eski5"]
 [ext_resource type="Texture2D" uid="uid://dunyjvvhwb34a" path="res://shotgunMinigame/shotgun.png" id="16_uty7l"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_4uo0j"]
+font_size = 25
+
+[sub_resource type="LabelSettings" id="LabelSettings_45l4g"]
+font_size = 30
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_pdf00"]
 animations = [{
@@ -41,21 +48,28 @@ size = Vector2(50, 29)
 [node name="Node" type="Node2D" groups=["rooot"]]
 script = ExtResource("1_ykrsh")
 
+[node name="order timer" type="Timer" parent="." groups=["order timer"]]
+wait_time = 3.0
+
 [node name="Camera2D" type="Camera2D" parent="." groups=["camera"]]
 position = Vector2(3207, 328)
 script = ExtResource("4_ppyta")
 
-[node name="orderTicket" type="RichTextLabel" parent="Camera2D"]
+[node name="order ticket" type="Label" parent="Camera2D" groups=["orderticket"]]
 offset_left = -559.0
-offset_top = 121.0
-offset_right = -358.0
-offset_bottom = 241.0
+offset_top = 131.0
+offset_right = -414.0
+offset_bottom = 308.0
+label_settings = SubResource("LabelSettings_4uo0j")
 
-[node name="warning Label" type="RichTextLabel" parent="Camera2D"]
+[node name="warning Label" type="Label" parent="Camera2D"]
 offset_left = -209.0
 offset_top = -69.0
 offset_right = 210.0
 offset_bottom = 81.0
+label_settings = SubResource("LabelSettings_45l4g")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Timer" type="Timer" parent="Camera2D"]
 wait_time = 0.2
@@ -74,14 +88,13 @@ script = ExtResource("2_xersf")
 [node name="patron spawn" type="Node2D" parent="patronManager"]
 position = Vector2(3433, 239)
 
-[node name="initial wait" type="Timer" parent="patronManager"]
-wait_time = 3.5
-one_shot = true
-autostart = true
-
 [node name="second wait" type="Timer" parent="patronManager"]
 
 [node name="patronActTimer" type="Timer" parent="patronManager"]
+
+[node name="initial wait" type="Timer" parent="patronManager"]
+wait_time = 3.5
+one_shot = true
 
 [node name="animation wait" type="Timer" parent="patronManager"]
 wait_time = 3.5
@@ -203,10 +216,14 @@ offset_top = -2.0
 offset_right = -72.0
 offset_bottom = 35.0
 
+[node name="tutorial manager" parent="." instance=ExtResource("5_45l4g")]
+position = Vector2(2631, 4)
+
+[connection signal="timeout" from="order timer" to="." method="_on_order_timer_timeout"]
 [connection signal="timeout" from="Camera2D/Timer" to="Camera2D" method="_on_timer_timeout"]
-[connection signal="timeout" from="patronManager/initial wait" to="patronManager" method="_on_initial_wait_timeout"]
 [connection signal="timeout" from="patronManager/second wait" to="patronManager" method="_on_second_wait_timeout"]
 [connection signal="timeout" from="patronManager/patronActTimer" to="patronManager" method="_on_patron_act_timer_timeout"]
+[connection signal="timeout" from="patronManager/initial wait" to="patronManager" method="_on_initial_wait_timeout"]
 [connection signal="timeout" from="patronManager/animation wait" to="patronManager" method="_on_animation_wait_timeout"]
 [connection signal="mouse_entered" from="discard cup" to="discard cup" method="_on_mouse_entered"]
 [connection signal="mouse_exited" from="discard cup" to="discard cup" method="_on_mouse_exited" flags=18]

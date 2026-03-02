@@ -4,7 +4,7 @@ var thereIsNoOrder		: bool = true
 var thereIsNoCup		: bool = true
 var is_dragging 		: bool = false
 var canCreateNewOrder 	: bool = true
-
+var orderTimeout		: bool 
 var targetOrder 		: String
 
 #change both to dictionary later, better for future proofing
@@ -44,20 +44,24 @@ var lives 				: int	= 3
 var cup_spawn
 var patron_manager
 
-signal killPatron
 
-@onready var order_ticket: RichTextLabel = $Camera2D/orderTicket
+var order_ticket: Label
+var orderTimer	: Timer
 @onready var eo_dscreen: Node2D = $Camera2D/EODscreen
 
 const CUP_2 = preload("uid://cb4ifvv1uv38p")
 
+signal killPatron
 signal newPatronEnters
 
 func _ready() -> void:
+	orderTimeout = true
 	patron_manager = get_tree().get_first_node_in_group("patronManager")
 	cup_spawn = get_tree().get_first_node_in_group("cupSpawn")
 	patron_manager.patronAttemptedMurder.connect(takeDamage)
-
+	order_ticket = get_tree().get_first_node_in_group("orderticket")
+	orderTimer = get_tree().get_first_node_in_group("order timer")
+	
 	
 func takeDamage():
 	lives -= 1
@@ -69,11 +73,12 @@ func takeDamage():
 	#print("button pressed")
 	
 func createOrder():
-	#print_stack()
+
 	#print("function called")
 	target = []
 	targetOrder = ""
 	if thereIsNoOrder:
+		
 		#print("there is no existing order")
 		if canCreateNewOrder and thereIsNoCup:
 			#print("can create a new order and there is no cup")
@@ -83,19 +88,19 @@ func createOrder():
 			canCreateNewOrder 	= false
 			
 			var possibleFlavors = resetPossibleFlavors()
-			
+
 			chooseMainFlavor()
 			chooseSubFlavors(possibleFlavors)
 			
 			#create order string
 			
-			var order = " "
+			var order = ""
 			for x in range( len(target) ):
 				order += target[x] +' \n'
+				
 			order_ticket.text = order
-			
 			create_target()
-			
+			orderTimer.start()
 		else:
 			print("cant create new order")
 	else:
@@ -166,7 +171,7 @@ func create_target():
 		
 #dronkFlavor is passed from cup to here for checking
 func validateOrder(dronkFlavor): 
-	
+
 	resetBoolValues()
 	if dronkFlavor == targetOrder:
 		results(true)
@@ -187,6 +192,8 @@ func results(correctDrink : bool) -> void:
 	if DaySystem.numberOfPatrons == 0:
 		killPatron.emit()
 		
+	elif DaySystem.currentDay == 1:
+		SignalBus.tutorialDrinkSubmit.emit(correctDrink)
 	else:
 		newPatronEnters.emit(correctDrink)
 	
@@ -205,3 +212,6 @@ func _on_discard_cup_pressed() -> void:
 	#HANDLE PATRONS
 	#!!!!
 	
+func _on_order_timer_timeout() -> void:
+	#orderTimeout = true
+	pass
