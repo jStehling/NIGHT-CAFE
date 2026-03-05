@@ -9,16 +9,16 @@ var focused = false
 
 func _ready() -> void:
 	parent = get_parent()
-	parent.changeButton.connect(changeButton)
-	parent.emphasize.connect(emphasize)
+	SignalBus.changeButton.connect(changeButton)
 	SignalBus.changeTutorialTextBox.connect(updatetext)
 	camera = get_tree().get_first_node_in_group("camera")
+	
 func updatetext(newText):
 	text.text = newText 
 	
 func _process(_delta: float) -> void:
 	if focused and Input.is_action_just_pressed("click"):
-		changeDialogue.emit()
+		SignalBus.advanceDialogue.emit()
 
 func changeButton(state : bool):
 	button.input_pickable = state

@@ -19,7 +19,12 @@ func _ready() -> void:
 
 	
 func beginTutorial() -> void:
-	Transition("day1")
+	match DaySystem.currentDay:
+		1:
+			Transition("day1")
+		2:
+			print('day2')
+			Transition("day2")
 		
 func Transition(newState : String) -> void:
 	if !currentState:

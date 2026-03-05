@@ -7,10 +7,20 @@ var twoTime : bool = false
 var gunAimed : bool = false
 var tween : Tween
 @onready var handTime : Timer = $handTimer
+@onready var shotgun_spawn: Node2D = $"../shotgunSpawn"
+@onready var light_switch: AnimatedSprite2D = $"../lightSwitch"
+
+func _ready() -> void:
+	SignalBus.tutorialOver.connect(begin)
+	visible = false
+
+func begin():
+	oneTime = true
 
 func _process(_delta) -> void:
 	if oneTime:
-		var handRng = ran.randf_range(1, 1)
+		var handRng = ran.randf_range(15, 30)
+		print(handRng)
 		handTime.start(handRng)
 		oneTime = false
 	if twoTime:
@@ -22,18 +32,20 @@ func _process(_delta) -> void:
 			twoTime = false
 		if handActive:
 			tween = create_tween()
-			tween.tween_property(self, "global_position", Vector2(2704, 187), 10)
+			tween.tween_property(self, "global_position", light_switch.global_position, 10)
 			print("tween active")
 			twoTime = false
 
 func _on_hand_timer_timeout() -> void:
 	handActive = true
 	twoTime = true
+	visible = true
 
 func _on_shotgun_gun_fired() -> void:
 	if gunAimed:
 		handActive = false
 		twoTime = true
+		visible = false
 
 func _on_hand_area_mouse_entered() -> void:
 	gunAimed = true

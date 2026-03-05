@@ -26,22 +26,25 @@ var root
 var viable 							= true
 var moveOnScreen 			= 600
 var textBoxMoveUp			= 531
-@onready var textbox: Node2D 		= $textbox
-@onready var temp_manager: Sprite2D = $"temp manager" 
+
+@onready var temp_manager: Sprite2D = $"../../temp manager"
+@onready var textbox: Node2D = $"../../textbox"
+
 @onready var timer: Timer = $Timer
 
 func Enter():
 	print("tutorial starting :u")
-	textbox.changeDialogue.connect(advanceTutorial)
 	root = get_tree().get_first_node_in_group("rooot")
 	
 	SignalBus.tutorialDrinkSubmit.connect(finishTutorial)
-	SignalBus.swappedScreensTutorial.connect(advanceTutorial)
-
-	var tween = get_tree().create_tween()
-	tween.tween_property(temp_manager, "global_position", Vector2(temp_manager.global_position.x - moveOnScreen, temp_manager.global_position.y), .5)
+	SignalBus.swappedScreensTutorial.connect(changeDialogue)
+	SignalBus.advanceDialogue.connect(changeDialogue)
 	SignalBus.changeTutorialTextBox.emit(dialogue[dialogueCount])
-	tween.tween_property(textbox, "global_position", Vector2(textbox.global_position.x, textBoxMoveUp),.5).set_ease(Tween.EASE_IN_OUT)
+	
+	var tween = get_tree().create_tween()
+	var tween1 = get_tree().create_tween()
+	tween.tween_property(temp_manager, "global_position", Vector2(temp_manager.global_position.x - moveOnScreen, temp_manager.global_position.y), .5)
+	tween1.tween_property(textbox, "global_position", Vector2(textbox.global_position.x, textBoxMoveUp),.5).set_ease(Tween.EASE_IN_OUT)
 	
 func Exit():
 	pass
@@ -58,23 +61,22 @@ func changeDialogue():
 			2:
 				#connects to textbox and disables pickable
 				SignalBus.flashTextOnScreen.emit("spacebar")
-				changeButton.emit(false)
+				SignalBus.changeButton.emit(false)
 			3:
-				changeButton.emit(true)
+				SignalBus.changeButton.emit(true)
 			10:
-				changeButton.emit(false)
+				SignalBus.changeButton.emit(false)
 				specialFunc()
 			11:
-				changeButton.emit(true)
+				SignalBus.changeButton.emit(true)
 	else:
 		var tween = get_tree().create_tween()
+		var tween1 = get_tree().create_tween()
 		#title drop
 		tween.tween_property(temp_manager, "global_position", Vector2(temp_manager.global_position.x + moveOnScreen, temp_manager.global_position.y), .5)
-		tween.tween_property(textbox, "global_position", Vector2(textbox.global_position.x, textbox.global_position.y + textBoxMoveUp),.5).set_ease(Tween.EASE_IN_OUT)
+		tween1.tween_property(textbox, "global_position", Vector2(textbox.global_position.x, textbox.global_position.y + textBoxMoveUp),.5).set_ease(Tween.EASE_IN_OUT)
 		SignalBus.tutorialOver.emit()
 
-func advanceTutorial():
-	changeDialogue()
 	
 func finishTutorial(results : bool):
 	if results:

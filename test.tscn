@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://dv0lmd27egqip"]
+[gd_scene load_steps=27 format=3 uid="uid://dv0lmd27egqip"]
 
 [ext_resource type="PackedScene" uid="uid://b0qdwc2lqmoa1" path="res://machines/test_target.tscn" id="1_6uqi0"]
 [ext_resource type="Script" uid="uid://cfex6l0bsh7sf" path="res://world.gd" id="1_ykrsh"]
@@ -18,6 +18,8 @@
 [ext_resource type="Script" uid="uid://6opy3j3ys6wh" path="res://shotgunMinigame/hand.gd" id="15_vxl6d"]
 [ext_resource type="Script" uid="uid://bl08ogfo6ll24" path="res://shotgunMinigame/shotgun.gd" id="16_eski5"]
 [ext_resource type="Texture2D" uid="uid://dunyjvvhwb34a" path="res://shotgunMinigame/shotgun.png" id="16_uty7l"]
+[ext_resource type="Texture2D" uid="uid://b0ad1v042y7du" path="res://icon.svg" id="18_4uo0j"]
+[ext_resource type="Script" uid="uid://dunxg3fl3lf5a" path="res://tutorial_target.gd" id="19_vxl6d"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_4uo0j"]
 font_size = 25
@@ -44,6 +46,9 @@ size = Vector2(35, 46)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dwqlq"]
 size = Vector2(50, 29)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vxl6d"]
+size = Vector2(129, 129)
 
 [node name="Node" type="Node2D" groups=["rooot"]]
 script = ExtResource("1_ykrsh")
@@ -176,8 +181,7 @@ flavor = "vanilla"
 position = Vector2(3067, 354)
 
 [node name="ShotgunMinigame" type="Node2D" parent="." groups=["ShotgunMiniGame"]]
-visible = false
-position = Vector2(3155, 603)
+position = Vector2(3153, 603)
 
 [node name="lightSwitch" type="AnimatedSprite2D" parent="ShotgunMinigame" groups=["ShotgunMiniGame"]]
 position = Vector2(-451, -416)
@@ -203,7 +207,6 @@ position = Vector2(-7, -2)
 shape = SubResource("RectangleShape2D_dwqlq")
 
 [node name="handTimer" type="Timer" parent="ShotgunMinigame/hand" groups=["ShotgunMiniGame"]]
-one_shot = true
 
 [node name="shotgun" type="Sprite2D" parent="ShotgunMinigame" groups=["ShotgunMiniGame"]]
 position = Vector2(-118, 22)
@@ -215,6 +218,20 @@ offset_left = -148.0
 offset_top = -2.0
 offset_right = -72.0
 offset_bottom = 35.0
+
+[node name="shotgunSpawn" type="Node2D" parent="ShotgunMinigame"]
+position = Vector2(727, -131)
+
+[node name="tutorialTarget" type="Sprite2D" parent="ShotgunMinigame"]
+position = Vector2(-318, -426)
+texture = ExtResource("18_4uo0j")
+script = ExtResource("19_vxl6d")
+
+[node name="Area2D" type="Area2D" parent="ShotgunMinigame/tutorialTarget"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ShotgunMinigame/tutorialTarget/Area2D"]
+position = Vector2(-0.5, -0.5)
+shape = SubResource("RectangleShape2D_vxl6d")
 
 [node name="tutorial manager" parent="." instance=ExtResource("5_45l4g")]
 position = Vector2(2631, 4)

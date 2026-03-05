@@ -19,7 +19,7 @@ func _ready() -> void:
 	EODscreen = get_tree().get_first_node_in_group("EODscreen")
 	EODscreen.transitionNextDay.connect(nextDay)
 	
-	currentDay = days[0]
+	currentDay = days[1]
 	print("current day: ", currentDay)
 	numberOfPatrons = 1
 	#print("DAY 1")

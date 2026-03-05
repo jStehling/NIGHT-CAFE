@@ -4,6 +4,10 @@ var gunActive : bool = false
 var ammoCount : int = 2
 signal gunFired
 
+func _ready():
+	#visible = false
+	pass
+
 func _input(event: InputEvent) -> void:
 	if gunActive == true:
 		if event is InputEventMouseButton:
@@ -25,6 +29,8 @@ func _on_grab_gun_pressed() -> void:
 	if ammoCount > 0:
 		if gunActive == false:
 			gunActive = true
+			if DaySystem.currentDay == 2:
+				SignalBus.shotgunGrabbed.emit()
 			print("gun is active")
 		else:
 			gunActive = false

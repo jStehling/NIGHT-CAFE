@@ -1,40 +1,45 @@
-[gd_scene load_steps=6 format=3 uid="uid://ris5qbdr05n3"]
+[gd_scene load_steps=7 format=3 uid="uid://ris5qbdr05n3"]
 
 [ext_resource type="Script" uid="uid://cksc1c2vatojv" path="res://managers/tutorial_manager.gd" id="1_vd7jt"]
 [ext_resource type="Script" uid="uid://b3b4bw2ganopf" path="res://statemachine code/State_Machine_State.gd" id="2_0vw57"]
 [ext_resource type="Script" uid="uid://coov4d06tswqg" path="res://managers/introduction.gd" id="3_ex5a2"]
 [ext_resource type="PackedScene" uid="uid://nm8yopk8n03u" path="res://screens/textbox.tscn" id="4_xsts5"]
 [ext_resource type="Texture2D" uid="uid://b0ad1v042y7du" path="res://icon.svg" id="5_xsts5"]
+[ext_resource type="Script" uid="uid://bg7lxcn4cjvmd" path="res://managers/intro_2.gd" id="6_2016q"]
 
-[node name="tutorial manager" type="Node2D" groups=["tutorialManager"]]
+[node name="tutorial manager" type="Node2D" node_paths=PackedStringArray("initialState") groups=["tutorialManager"]]
 script = ExtResource("1_vd7jt")
+initialState = NodePath("day1")
 
 [node name="day1" type="Node2D" parent="." node_paths=PackedStringArray("initialState")]
 script = ExtResource("2_0vw57")
-initialState = NodePath("introduction")
+initialState = NodePath("intro1")
 
-[node name="introduction" type="Node2D" parent="day1"]
+[node name="intro1" type="Node2D" parent="day1"]
 script = ExtResource("3_ex5a2")
 
-[node name="temp manager" type="Sprite2D" parent="day1/introduction"]
-position = Vector2(1372, 222)
-rotation = 0.7853982
-scale = Vector2(1.9999998, 1.9999998)
-texture = ExtResource("5_xsts5")
+[node name="Timer" type="Timer" parent="day1/intro1"]
 
-[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="day1/introduction/temp manager"]
+[node name="day2" type="Node2D" parent="." node_paths=PackedStringArray("initialState")]
+script = ExtResource("2_0vw57")
+initialState = NodePath("intro2")
 
-[node name="Timer" type="Timer" parent="day1/introduction"]
-
-[node name="textbox" parent="day1/introduction" instance=ExtResource("4_xsts5")]
-position = Vector2(0, 648)
-
-[node name="day2" type="Node2D" parent="."]
-
-[node name="Node" type="Node" parent="day2"]
+[node name="intro2" type="Node2D" parent="day2"]
+script = ExtResource("6_2016q")
 
 [node name="day3" type="Node2D" parent="."]
 
 [node name="day4" type="Node2D" parent="."]
 
 [node name="Node" type="Node2D" parent="."]
+
+[node name="temp manager" type="Sprite2D" parent="."]
+position = Vector2(1372, 222)
+rotation = 0.7853982
+scale = Vector2(1.9999998, 1.9999998)
+texture = ExtResource("5_xsts5")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="temp manager"]
+
+[node name="textbox" parent="." instance=ExtResource("4_xsts5")]
+position = Vector2(0, 648)
